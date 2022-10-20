@@ -13,9 +13,18 @@ router ospf
 show ip route ospf
 
 router bgp 1
-    set router-id 10.10.10.1
+    bgp router-id 10.0.0.1
+    network 10.0.0.0 mask 255.255.255.0
 
 show bgp summary
+
+router isis 1
+net 49.0000.0000.0000.0001.00
+ip router isis 1
+isis circuit-type level 1
+
+show ip address
+do sh isis interface
 ```
 
 ## Notes
