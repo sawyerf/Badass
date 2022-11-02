@@ -9,3 +9,7 @@ Si chaque routeur doit établir une adjacence complète (Full Adjacency) avec to
 La solution à cette surcharge est l’organisation de <strong>l’élection d’un routeur désigné (designated router, DR).</strong> Ce routeur devient adjacent à tous les autres routeurs dans un segment de Broadcast. Tous les autres routeurs sur le même segment envoient leurs informations d’état de lien au DR. <strong>Le DR agit comme porte-parole pour le segment.</strong>
 
 BDR => BACKUP DE DR
+
+
+
+[http://mhd-experts.com/quel-underlay-pour-ma-fabric-leaf-spine-partie-2/](http://mhd-experts.com/quel-underlay-pour-ma-fabric-leaf-spine-partie-2/)
