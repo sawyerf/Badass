@@ -1,0 +1,26 @@
+```
+ip link add name vxlan0 type vxlan id 1 dev eth0 remote 192.168.1.2 local 192.168.1.1 dstport 4789
+ip address add 50.1.1.1/24 dev vxlan0
+ip link set up vxlan0
+
+
+brctl addbr br100
+brctl addif br100 eth0
+brctl addif br100 eth1
+brctl addif br100 vxlan0
+ip link set up dev br100
+ip link set up dev vxlan0
+```
+
+```
+ip link add name vxlan0 type vxlan id 1 dev eth0 remote 192.168.1.1 local 192.168.1.2 dstport 4789
+ip address add 50.1.1.2/24 dev vxlan0
+ip link set up vxlan0
+
+brctl addbr br100
+brctl addif br100 eth0
+brctl addif br100 eth1
+brctl addif br100 vxlan0
+ip link set up dev br100
+ip link set up dev vxlan0
+```
