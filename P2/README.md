@@ -10,31 +10,41 @@ i eth0
 i eth1
 	ip address 10.0.1.1/16
 
-router ospf
-	network 192.168.1.1/24 area 0
 end
 exit
 ```
 
 
 ### bridge (VXLAN)
-```
-##### Partie VXLAN 10 #####
-# Création d'un VTEP pour le VXLAN 10
-ip link add vxlan100 type vxlan id 10 dstport 4789 local 192.168.1.1
 
+```
+##### Partie VXLAN 100 #####
+# Création d'un VTEP pour le VXLAN 100
+```
+
+### bridge static
+```
+ip link add vxlan10 type vxlan id 10 dstport 4789 local 192.168.1.1
+```
+
+### bridge multicast
+```
+ip link add vxlan10 type vxlan id 10 group 239.1.1.1 dev eth0 dstport 4789
+```
+
+```
 # Déclaration des VTEP distants
-bridge fdb append 00:00:00:00:00:00 dev vxlan100 dst 192.168.1.2
+bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 192.168.1.2
 
 # Création du pont et ajout des interfaces devants faire partie du VXLAN 10
-brctl addbr br100
-brctl addif br100 vxlan100
-brctl addif br100 eth1
+brctl addbr br0
+brctl addif br0 vxlan10
+brctl addif br0 eth1
 
 # Désactivation du spanning tree (les VTEP étant du point à point, aucune boucle ne peut être formée par ce biais)
-brctl stp br100 off
-ip link set up dev br100
-ip link set up dev vxlan100
+brctl stp br0 off
+ip link set up dev br0
+ip link set up dev vxlan10
 ```
 
 
@@ -50,32 +60,41 @@ i eth0
 i eth1
 	ip address 10.0.2.1/16
 
-router ospf
-	network 192.168.1.2/24 area 0
 end
 exit
 ```
 
 ### bridge (VXLAN)
+
 ```
 ##### Partie VXLAN 100 #####
 # Création d'un VTEP pour le VXLAN 100
-ip link add vxlan100 type vxlan id 10 dstport 4789 local 192.168.1.2
-
-# Déclaration des VTEP distants
-bridge fdb append 00:00:00:00:00:00 dev vxlan100 dst 192.168.1.1
-
-# Création du pont et ajout des interfaces devants faire partie du VXLAN 100
-brctl addbr br100
-brctl addif br100 vxlan100
-brctl addif br100 eth1
-
-# Désactivation du spanning tree (les VTEP étant du point à point, aucune boucle ne peut être formée par ce biais)
-brctl stp br100 off
-ip link set up dev br100
-ip link set up dev vxlan100
 ```
 
+### bridge static
+```
+ip link add vxlan10 type vxlan id 10 dstport 4789 local 192.168.1.2
+```
+
+### bridge multicast
+```
+ip link add vxlan10 type vxlan id 10 group 239.1.1.1 dev eth0 dstport 4789
+```
+
+```
+# Déclaration des VTEP distants
+bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 192.168.1.1
+
+# Création du pont et ajout des interfaces devants faire partie du VXLAN 100
+brctl addbr br0
+brctl addif br0 vxlan10
+brctl addif br0 eth1
+
+# Désactivation du spanning tree (les VTEP étant du point à point, aucune boucle ne peut être formée par ce biais)
+brctl stp br0 off
+ip link set up dev br0
+ip link set up dev vxlan10
+```
 
 
 # Host 1
@@ -90,24 +109,13 @@ ip addr add 10.0.2.2/16 dev eth0
 ip route add default via 10.0.2.1 dev eth0
 ```
 
----
 
-dstport : VTEP The communication port, the port assigned by IANA is 4789. If not specified, Linux uses by default8472。
+# Visualisation
 
-remote : The address of the opposite VTEP.
-
-local : Current nodeVTEP The IP address to be used is the IP address of the tunnel port of the current node.
-
-dev eth0 : The current node is used forVTEP The communication device is used to obtain the VTEP IP address.This parameter has the same purpose as the local parameter, just choose one of the two。
-
-VTEP:
-
-VTEP encapsulation
-
-The VXLAN Tunnel End Point (VTEP) is the VXLAN encapsulation point and is connected to a traffic source which may be a stand-alone server or virtual machine. For example, the VTEP could be part of the hypervisor in a server platform, part of the network interface device in the server, or part of the attached top of rack (ToR) switch.
-
-
-Overlay networks based on VXLANs transport frames after encapsulating them as VXLAN packets. Encapsulation and de-encapsulation in these networks are done by an entity called the Virtual Tunnel End Point (VTEP).
+```
+ip -d link show vxlan10
+bridge fdb show dev vxlan10
+```
 
 # Show
 ```
@@ -125,5 +133,5 @@ With linux command:
 - [VXLAN & Linux](https://vincent.bernat.ch/fr/blog/2017-vxlan-linux)
 - [Practice VxLAN under Linux](https://programmer.help/blogs/practice-vxlan-under-linux.html)
 - [Meme Composition d'equipe](https://doc.ycharbi.fr/index.php/Vxlan)
-
+- [VXlan multicast](https://www.kernel.org/doc/html/v5.17/networking/vxlan.html)
 - [Sheet sheeeesh](https://access.redhat.com/sites/default/files/attachments/rh_ip_command_cheatsheet_1214_jcs_print.pdf)
