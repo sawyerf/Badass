@@ -24,3 +24,57 @@ brctl addif br100 vxlan0
 ip link set up dev br100
 ip link set up dev vxlan0
 ```
+
+
+
+___________________________________________________________________________________
+
+
+# Router 1
+```
+##### Partie VXLAN 100 #####
+# Création d'un VTEP pour le VXLAN 100
+ip link add vxlan100 type vxlan id 100 dstport 4789 local 192.168.1.1
+
+# Déclaration des VTEP distants
+bridge fdb append 00:00:00:00:00:00 dev vxlan100 dst 192.168.1.2
+
+# Création du pont et ajout des interfaces devants faire partie du VXLAN 100
+brctl addbr br100
+brctl addif br100 vxlan100
+brctl addif br100 eth1
+
+# Désactivation du spanning tree (les VTEP étant du point à point, aucune boucle ne peut être formée par ce biais)
+brctl stp br100 off
+ip link set up dev br100
+ip link set up dev vxlan100
+```
+
+
+# Router 2
+```
+##### Partie VXLAN 100 #####
+# Création d'un VTEP pour le VXLAN 100
+ip link add vxlan100 type vxlan id 100 dstport 4789 local 192.168.1.2
+
+# Déclaration des VTEP distants
+bridge fdb append 00:00:00:00:00:00 dev vxlan100 dst 192.168.1.1
+
+# Création du pont et ajout des interfaces devants faire partie du VXLAN 100
+brctl addbr br100
+brctl addif br100 vxlan100
+brctl addif br100 eth1
+
+# Désactivation du spanning tree (les VTEP étant du point à point, aucune boucle ne peut être formée par ce biais)
+brctl stp br100 off
+ip link set up dev br100
+ip link set up dev vxlan100
+```
+
+
+# Visualisation
+
+```
+ip -d link show vxlan100
+bridge fdb show dev vxlan100
+```

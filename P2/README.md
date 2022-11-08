@@ -19,16 +19,22 @@ exit
 
 ### bridge (VXLAN)
 ```
-ip link add vxlan0 type vxlan id 100 dstport 4789 remote 192.168.1.2 local 192.168.1.1 dev eth0
+##### Partie VXLAN 10 #####
+# Création d'un VTEP pour le VXLAN 10
+ip link add vxlan100 type vxlan id 10 dstport 4789 local 192.168.1.1
 
-# ? Not sure ?
+# Déclaration des VTEP distants
+bridge fdb append 00:00:00:00:00:00 dev vxlan100 dst 192.168.1.2
+
+# Création du pont et ajout des interfaces devants faire partie du VXLAN 10
 brctl addbr br100
+brctl addif br100 vxlan100
 brctl addif br100 eth1
-brctl addif br100 vxlan0
+
+# Désactivation du spanning tree (les VTEP étant du point à point, aucune boucle ne peut être formée par ce biais)
 brctl stp br100 off
-brctl addbr br100 eth1
-ip link set up dev br100 
-ip link set up dev vxlan0
+ip link set up dev br100
+ip link set up dev vxlan100
 ```
 
 
@@ -42,7 +48,7 @@ i eth0
 	ip address 192.168.1.2/24
 
 i eth1
-	ip address 10.0.1.2/24
+	ip address 10.0.2.1/16
 
 router ospf
 	network 192.168.1.2/24 area 0
@@ -52,36 +58,36 @@ exit
 
 ### bridge (VXLAN)
 ```
-ip link add vxlan0 type vxlan id 100 dstport 4789 remote 192.168.1.1 local 192.168.1.2 dev eth0
+##### Partie VXLAN 100 #####
+# Création d'un VTEP pour le VXLAN 100
+ip link add vxlan100 type vxlan id 10 dstport 4789 local 192.168.1.2
 
-# ? Not sure ?
+# Déclaration des VTEP distants
+bridge fdb append 00:00:00:00:00:00 dev vxlan100 dst 192.168.1.1
+
+# Création du pont et ajout des interfaces devants faire partie du VXLAN 100
 brctl addbr br100
+brctl addif br100 vxlan100
 brctl addif br100 eth1
-brctl addif br100 vxlan0
+
+# Désactivation du spanning tree (les VTEP étant du point à point, aucune boucle ne peut être formée par ce biais)
 brctl stp br100 off
 ip link set up dev br100
-ip link set up dev vxlan0
+ip link set up dev vxlan100
 ```
+
 
 
 # Host 1
 ```sh
-ip addr add 10.0.1.11/24 dev eth0
+ip addr add 10.0.1.2/16 dev eth0
 ip route add default via 10.0.1.1 dev eth0
-```
-
-```
-auto eth0
-iface eth0 inet static
-	address 10.0.2.2
-	netmask 255.255.0.0
-	gateway 10.0.2.1
 ```
 
 # Host 2
 ```sh
-ip addr add 10.0.1.12/24 dev eth0
-ip route add default via 10.0.1.2 dev eth0
+ip addr add 10.0.2.2/16 dev eth0
+ip route add default via 10.0.2.1 dev eth0
 ```
 
 ---
