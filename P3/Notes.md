@@ -18,5 +18,18 @@ Les avantages de l’architecture LEAF & SPINE :
 - Prédictible dans le sens ou chaque serveur doit passer par trois équipements (LEAF > SPINE > LEAF) pour communiquer avec n’importe quel serveur dans la fabrique.
 
 
+
+## Multihop
+
+Multi-hop routing (or multihop routing) is a type of communication in radio networks in which network coverage area is larger than radio range of single nodes. Therefore, to reach some destination a node can use other nodes as relays.
+
+## Fonctionnement du route reflector
+
+À l'intérieur d'un système autonome, les routes ne sont pas transitives, c'est-à-dire qu'une route reçue d'un voisin iBGP n'est pas transmise aux autres voisins iBGP. Pour que les routes soient connues par l'ensemble des routeurs de l'AS, ceux-ci établissent donc des connexions entre eux dans un maillage complet (full mesh, chaque routeur communique avec tous les autres), ce qui pose un problème d'échelle quand ces routeurs sont nombreux, le nombre de connexions augmentant comme le carré du nombre de routeurs. L'addition d'un nouveau routeur oblige à modifier la configuration de tous les routeurs BGP de l'AS. 
+
+Le route reflector permet de diminuer cette contrainte : il redistribue les routes apprises par iBGP à des pairs iBGP (appelés ses clients). Ceux-ci n'ont besoin que d'établir des sessions iBGP qu'avec le RR. 
+
+En général on utilise au moins deux RR pour assurer la redondance en cas de défaillance d'un RR. 
+
 - [https://mhd-experts.com/larchitecture-leaf-spine/](https://mhd-experts.com/larchitecture-leaf-spine/)
 - [https://www.arubanetworks.com/fr/faq/quest-ce-quune-architecture-leaf-spine/](https://www.arubanetworks.com/fr/faq/quest-ce-quune-architecture-leaf-spine/)
