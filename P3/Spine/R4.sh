@@ -1,5 +1,6 @@
 #5007
 
+# SPINE
 vtysh
 config t
 no ipv6 forwarding
@@ -7,13 +8,13 @@ i lo
 	ip address 1.1.1.4/32
 
 i eth0
-	ip address 10.1.1.1/30
+	ip address 192.168.1.1/24
 
 i eth1
-	ip address 10.1.1.5/30
+	ip address 192.168.2.1/24
 
 i eth2
-	ip address 10.1.1.9/30
+	ip address 192.168.3.1/24
 
 router bgp 1
     neighbor ibgp peer-group

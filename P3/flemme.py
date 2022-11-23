@@ -18,7 +18,7 @@ def sendScript(port, scriptContent):
 		print(data)
 		sock.close()
 
-for folder in ['Spine', 'Leafs', 'Host']:
+for folder in ['Spine', 'Leafs', 'Host', 'Test']:
 	for scriptFile in os.listdir(folder):
 		scriptContent = open(f'{folder}/{scriptFile}', 'r').read()
 		port = int(re.findall(r'#([0-9]{4})', scriptContent)[0])
