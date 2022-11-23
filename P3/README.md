@@ -11,8 +11,8 @@
 
 > Structure de data center vxlan + bgp
 
-<img align="right" height="700" src="https://user-images.githubusercontent.com/22857002/203620410-e0747d64-d650-458a-9915-8cc8d1257a3b.svg">
-<img height="700" src="https://user-images.githubusercontent.com/28403617/203608171-6c3124cb-7563-421e-b231-5d9cdbab9703.png">
+<img align="right" height="400" src="https://user-images.githubusercontent.com/22857002/203620410-e0747d64-d650-458a-9915-8cc8d1257a3b.svg">
+<img height="400" src="https://user-images.githubusercontent.com/28403617/203608171-6c3124cb-7563-421e-b231-5d9cdbab9703.png">
 
 ----
  
