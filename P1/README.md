@@ -25,6 +25,9 @@ isis circuit-type level 1
 
 show ip address
 do sh isis interface
+end
+exit
+
 ```
 
 ## Notes

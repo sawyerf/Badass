@@ -18,10 +18,10 @@ exit
 
 # ======================== Choice ========================
 # Static
-# ip link add vxlan10 type vxlan id 10 dstport 4789 local 192.168.1.2
+ip link add vxlan10 type vxlan id 10 dstport 4789 local 192.168.1.2
 
 # Multicast
-ip link add vxlan10 type vxlan id 10 group 239.1.1.1 dev eth0 dstport 4789
+# ip link add vxlan10 type vxlan id 10 group 239.1.1.1 dev eth0 dstport 4789
 
 # ======================== Choice ========================
 

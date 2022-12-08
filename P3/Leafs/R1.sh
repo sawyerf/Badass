@@ -15,8 +15,8 @@ ip link set up dev vxlan10
 vtysh
 config t
 no ipv6 forwarding
+
 i eth0
-	ip address 10.1.1.2/30
 	ip ospf area 0
 	ip address 192.168.1.2/24
 

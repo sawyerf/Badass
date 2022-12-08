@@ -42,3 +42,7 @@ Si vous effectuez un routage interne, tel que le routage au sein d'un site, une 
 
 ### IS-IS Protocol
 IS-IS is an IGP, link-state routing protocol, similar to OSPF.
+
+
+### VTEP
+Encapsulation and de-encapsulation in these networks are done by an entity called the Virtual Tunnel End Point (VTEP).
